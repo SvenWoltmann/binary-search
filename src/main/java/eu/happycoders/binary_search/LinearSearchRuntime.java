@@ -92,7 +92,7 @@ public class LinearSearchRuntime {
       times.add(time);
       long median = Statistics.median(times);
       System.out.printf(
-          Locale.US, "  -->  Median after %2d iterations = %,11d ns", iteration + 1, median );
+          Locale.US, "  -->  Median after %2d iterations = %,11d ns", iteration + 1, median);
     }
     System.out.println();
   }
