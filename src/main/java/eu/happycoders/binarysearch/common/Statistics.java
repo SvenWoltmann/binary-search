@@ -1,4 +1,4 @@
-package eu.happycoders.binary_search.common;
+package eu.happycoders.binarysearch.common;
 
 import java.util.Arrays;
 import java.util.List;
@@ -8,7 +8,9 @@ import java.util.List;
  *
  * @author <a href="sven@happycoders.eu">Sven Woltmann</a>
  */
-public class Statistics {
+public final class Statistics {
+
+  private Statistics() {}
 
   /**
    * Calculates the median of the given list of values.
@@ -31,11 +33,15 @@ public class Statistics {
    * @param values the values
    * @return the median of the given values
    */
+  @SuppressWarnings("PMD.UseVarargs") // No, I don't want to use varargs here
   public static long median(long[] values) {
     Arrays.sort(values);
     int length = values.length;
     int middle = length / 2;
-    if (length % 2 == 0) return (values[middle] + values[middle - 1]) / 2;
-    else return values[middle];
+    if (length % 2 == 0) {
+      return (values[middle] + values[middle - 1]) / 2;
+    } else {
+      return values[middle];
+    }
   }
 }

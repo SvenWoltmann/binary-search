@@ -1,18 +1,20 @@
-package eu.happycoders.binary_search;
+package eu.happycoders.binarysearch;
 
-import eu.happycoders.binary_search.common.ArrayUtils;
-import eu.happycoders.binary_search.common.Statistics;
+import eu.happycoders.binarysearch.common.ArrayUtils;
+import eu.happycoders.binarysearch.common.Statistics;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * Measures the runtime of binary search for various sizes of int arrays.
  *
  * @author <a href="sven@happycoders.eu">Sven Woltmann</a>
  */
+// Ignore these warnings - this is just a test program
+@SuppressWarnings({"squid:S106", "PMD.SystemPrintln", "PMD.UseUtilityClass"})
 public class BinarySearchRuntime {
 
   private static final int MAX_WARMUPS = 10;
@@ -20,38 +22,42 @@ public class BinarySearchRuntime {
 
   private static final int BATCH_SIZE = 100;
 
-  private static final int[] ARRAY_SIZES =
-      new int[] {
-        0,
-        10_000,
-        20_000,
-        50_000,
-        100_000,
-        200_000,
-        500_000,
-        1_000_000,
-        1_500_000,
-        2_000_000,
-        3_000_000,
-        4_000_000,
-        6_000_000,
-        8_000_000,
-        10_000_000,
-        15_000_000,
-        20_000_000,
-        30_000_000,
-        40_000_000,
-        60_000_000,
-        80_000_000,
-        100_000_000,
-        150_000_000,
-        200_000_000
-      };
+  private static final int[] ARRAY_SIZES = {
+    0,
+    10_000,
+    20_000,
+    50_000,
+    100_000,
+    200_000,
+    500_000,
+    1_000_000,
+    1_500_000,
+    2_000_000,
+    3_000_000,
+    4_000_000,
+    6_000_000,
+    8_000_000,
+    10_000_000,
+    15_000_000,
+    20_000_000,
+    30_000_000,
+    40_000_000,
+    60_000_000,
+    80_000_000,
+    100_000_000,
+    150_000_000,
+    200_000_000
+  };
 
-  private static final Map<Integer, List<Long>> TIMES = new HashMap<>();
+  private static final Map<Integer, List<Long>> TIMES = new ConcurrentHashMap<>();
 
-  private static long globalBlackhole = 0;
+  private static long globalBlackhole;
 
+  /**
+   * Tests the speed of the {@link BinarySearch} implementation.
+   *
+   * @param args program arguments are ignored
+   */
   public static void main(String[] args) {
     for (int i = 0; i < MAX_WARMUPS; i++) {
       runTests(i, true);
@@ -71,10 +77,12 @@ public class BinarySearchRuntime {
     System.out.println("globalBlackhole = " + globalBlackhole);
   }
 
-  private static void runSingleTest(int iteration, boolean warmup, int n) {
+  // Let's try to run the GC *before* the test (no guarantee that it works)
+  @SuppressWarnings({"squid:S1215", "PMD.DoNotCallGarbageCollectionExplicitly"})
+  private static void runSingleTest(int iteration, boolean warmup, int arraySize) {
     System.gc();
 
-    int[] array = ArrayUtils.createSortedArray(n);
+    int[] array = ArrayUtils.createSortedArray(arraySize);
     int[] keys = ArrayUtils.pickRandomKeys(array, BATCH_SIZE);
 
     long localBlackhole = 0;
@@ -85,10 +93,10 @@ public class BinarySearchRuntime {
     time = (System.nanoTime() - time) / BATCH_SIZE;
     globalBlackhole += localBlackhole;
 
-    System.out.printf(Locale.US, "Time for array with %,11d elements: %,6d ns", n, time);
+    System.out.printf(Locale.US, "Time for array with %,11d elements: %,6d ns", arraySize, time);
 
     if (!warmup) {
-      List<Long> times = TIMES.computeIfAbsent(n, k -> new ArrayList<>());
+      List<Long> times = TIMES.computeIfAbsent(arraySize, k -> new ArrayList<>());
       times.add(time);
       long median = Statistics.median(times);
       System.out.printf(

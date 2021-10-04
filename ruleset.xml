@@ -36,6 +36,7 @@
   <rule ref="category/java/design.xml">
     <exclude name="GodClass"/>                    <!-- "God classes do too many things, are very big and overly complex" - we accept that for the Red-Black Tree -->
     <exclude name="TooManyMethods"/>              <!-- We also accept this for the Red-Black Tree -->
+    <exclude name="LawOfDemeter"/>                <!-- We don't want to apply this law -->
   </rule>
 
   <rule ref="category/java/documentation.xml">

@@ -1,4 +1,4 @@
-package eu.happycoders.binary_search.common;
+package eu.happycoders.binarysearch.common;
 
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import java.util.concurrent.ThreadLocalRandom;
@@ -10,9 +10,11 @@ import java.util.concurrent.ThreadLocalRandom;
  */
 @SuppressWarnings("squid:S2245") // We don't need secure random numbers for wait time
 @SuppressFBWarnings("PREDICTABLE_RANDOM") // We don't need secure random numbers for wait time
-public class ArrayUtils {
+public final class ArrayUtils {
 
   private static final int NUM_INCREMENTS = 16;
+
+  private ArrayUtils() {}
 
   /**
    * Creates a sorted array with random integers.
@@ -23,18 +25,18 @@ public class ArrayUtils {
    * <p>The way we're going here is to fill the array with values repeatedly incremented by a short
    * random sequence of increments.
    *
-   * @param n the number of elements
+   * @param size the number of elements
    * @return the array
    */
-  public static int[] createSortedArray(int n) {
+  public static int[] createSortedArray(int size) {
     ThreadLocalRandom random = ThreadLocalRandom.current();
 
-    int[] array = new int[n];
+    int[] array = new int[size];
 
-    if (n == 1) {
+    if (size == 1) {
       array[0] = random.nextInt();
-    } else if (n != 0) {
-      int maxIncrement = (int) (4_294_967_295L / n);
+    } else if (size != 0) {
+      int maxIncrement = (int) (4_294_967_295L / size);
 
       int[] increments = new int[NUM_INCREMENTS];
       for (int i = 0; i < NUM_INCREMENTS; i++) {
@@ -42,7 +44,7 @@ public class ArrayUtils {
       }
 
       int val = Integer.MIN_VALUE;
-      for (int i = 0; i < n; i++) {
+      for (int i = 0; i < size; i++) {
         array[i] = val;
         val += increments[i % NUM_INCREMENTS];
       }
@@ -57,13 +59,14 @@ public class ArrayUtils {
    * @param array the array to pick keys from
    * @param numKeys the number of keys to pick
    */
+  @SuppressWarnings("PMD.AvoidArrayLoops") // false positive
   public static int[] pickRandomKeys(int[] array, int numKeys) {
-    int keys[] = new int[numKeys];
-    int n = array.length;
-    if (n != 0) {
+    int[] keys = new int[numKeys];
+    int arraySize = array.length;
+    if (arraySize != 0) {
       ThreadLocalRandom random = ThreadLocalRandom.current();
       for (int i = 0; i < numKeys; i++) {
-        int keyPos = random.nextInt(0, n);
+        int keyPos = random.nextInt(0, arraySize);
         keys[i] = array[keyPos];
       }
     }

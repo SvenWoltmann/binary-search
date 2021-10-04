@@ -1,4 +1,4 @@
-package eu.happycoders.binary_search;
+package eu.happycoders.binarysearch;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
