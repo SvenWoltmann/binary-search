@@ -1,6 +1,5 @@
 package eu.happycoders.binarysearch.common;
 
-import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import java.util.concurrent.ThreadLocalRandom;
 
 /**
@@ -9,7 +8,6 @@ import java.util.concurrent.ThreadLocalRandom;
  * @author <a href="sven@happycoders.eu">Sven Woltmann</a>
  */
 @SuppressWarnings("squid:S2245") // We don't need secure random numbers for wait time
-@SuppressFBWarnings("PREDICTABLE_RANDOM") // We don't need secure random numbers for wait time
 public final class ArrayUtils {
 
   private static final int NUM_INCREMENTS = 16;
