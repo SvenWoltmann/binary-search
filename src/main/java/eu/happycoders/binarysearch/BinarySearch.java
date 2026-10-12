@@ -17,7 +17,7 @@ public final class BinarySearch {
    * @return the position of the key in the array; or -1 if the key doesn't exist in the array
    */
   public static int binarySearchRecursively(int[] array, int key) {
-    return binarySearchRecursively(array, 0, array.length, key);
+    return binarySearchRecursively(array, 0, array.length - 1, key);
   }
 
   /**
@@ -25,27 +25,27 @@ public final class BinarySearch {
    * search.
    *
    * @param array the array in which to search the key
-   * @param fromIndex the start (inclusive) of the range to search
-   * @param toIndex the end (exclusive) of the range to search
+   * @param low the first index (inclusive) of the range to search
+   * @param high the last index (inclusive) of the range to search
    * @param key the key to search
    * @return the position of the key in the array; or -1 if the key doesn't exist in the array
    */
-  public static int binarySearchRecursively(int[] array, int fromIndex, int toIndex, int key) {
-    if (toIndex <= fromIndex) {
+  public static int binarySearchRecursively(int[] array, int low, int high, int key) {
+    if (high < low) {
       return -1;
     }
 
-    // "(fromIndex + toIndex) / 2" won't work if the sum is higher than Integer.MAX_VALUE.
+    // "(low + high) / 2" won't work if the sum is higher than Integer.MAX_VALUE.
     // That would cause an overflow / roll over, and result in a negative value!
-    int mid = (fromIndex + toIndex) >>> 1;
+    int mid = (low + high) >>> 1;
     int midVal = array[mid];
 
     if (key == midVal) {
       return mid;
     } else if (key < midVal) {
-      return binarySearchRecursively(array, fromIndex, mid, key);
+      return binarySearchRecursively(array, low, mid - 1, key);
     } else {
-      return binarySearchRecursively(array, mid + 1, toIndex, key);
+      return binarySearchRecursively(array, mid + 1, high, key);
     }
   }
 
@@ -72,10 +72,10 @@ public final class BinarySearch {
    */
   public static int binarySearchIteratively(int[] array, int fromIndex, int toIndex, int key) {
     int low = fromIndex;
-    int high = toIndex;
+    int high = toIndex - 1;
 
-    while (low < high) {
-      // "(fromIndex + toIndex) / 2" won't work if the sum is higher than Integer.MAX_VALUE.
+    while (low <= high) {
+      // "(low + high) / 2" won't work if the sum is higher than Integer.MAX_VALUE.
       // That would cause an overflow / roll over, and result in a negative value!
       int mid = (low + high) >>> 1;
       int midVal = array[mid];
@@ -83,7 +83,7 @@ public final class BinarySearch {
       if (key == midVal) {
         return mid;
       } else if (key < midVal) {
-        high = mid;
+        high = mid - 1;
       } else {
         low = mid + 1;
       }
